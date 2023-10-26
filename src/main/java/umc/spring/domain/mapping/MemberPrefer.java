@@ -1,12 +1,11 @@
 package umc.spring.domain.mapping;
 
 import lombok.*;
+import umc.spring.domain.FoodCategory;
+import umc.spring.domain.Member;
 import umc.spring.domain.base.BaseEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -18,4 +17,12 @@ public class MemberPrefer extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private FoodCategory foodCategory;
 }

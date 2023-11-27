@@ -32,9 +32,23 @@ public class Store extends BaseEntity {
     @JoinColumn(name = "category_id")
     private FoodCategory foodCategory;
 
+    public void setFoodCategory(FoodCategory foodCategory){
+        if(this.foodCategory != null)
+            foodCategory.getStoreList().remove(this);
+        this.foodCategory = foodCategory;
+        foodCategory.getStoreList().add(this);
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id")
     private Region region;
+
+    public void setRegion(Region region){
+        if(this.region != null)
+            region.getStoreList().remove(this);
+        this.region = region;
+        region.getStoreList().add(this);
+    }
 
     @OneToMany(mappedBy = "store", cascade = CascadeType.ALL)
     private List<Review> reviewList = new ArrayList<>();

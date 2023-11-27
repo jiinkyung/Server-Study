@@ -1,6 +1,7 @@
 package umc.spring.domain;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import umc.spring.domain.base.BaseEntity;
 
 import javax.persistence.*;
@@ -24,6 +25,7 @@ public class Store extends BaseEntity {
     @Column(nullable = false, length = 40)
     private String address;
 
+    @ColumnDefault("0")
     private Float score;
 
     @ManyToOne(fetch = FetchType.LAZY)

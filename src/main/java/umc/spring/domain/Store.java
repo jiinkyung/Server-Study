@@ -34,7 +34,7 @@ public class Store extends BaseEntity {
 
     public void setFoodCategory(FoodCategory foodCategory){
         if(this.foodCategory != null)
-            foodCategory.getStoreList().remove(this);
+            this.foodCategory.getStoreList().remove(this);
         this.foodCategory = foodCategory;
         foodCategory.getStoreList().add(this);
     }
@@ -45,7 +45,7 @@ public class Store extends BaseEntity {
 
     public void setRegion(Region region){
         if(this.region != null)
-            region.getStoreList().remove(this);
+            this.region.getStoreList().remove(this);
         this.region = region;
         region.getStoreList().add(this);
     }

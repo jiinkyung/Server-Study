@@ -43,5 +43,7 @@ public class ReviewResponseDTO {
         Float score;
         String body;
         LocalDate createdAt;
+        Long storeId;
+        String storeName;
     }
 }

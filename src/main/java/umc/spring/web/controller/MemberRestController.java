@@ -7,17 +7,26 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import umc.spring.apiPayload.ApiResponse;
+import umc.spring.apiPayload.code.status.ErrorStatus;
+import umc.spring.apiPayload.exception.GeneralException;
 import umc.spring.converter.MemberConverter;
+import umc.spring.converter.MemberMissionConverter;
 import umc.spring.converter.ReviewConverter;
 import umc.spring.domain.Member;
+import umc.spring.domain.Mission;
 import umc.spring.domain.Review;
+import umc.spring.domain.mapping.MemberMission;
+import umc.spring.repository.MemberRepository;
+import umc.spring.repository.MissionRepository;
 import umc.spring.service.MemberService.MemberCommandService;
 import umc.spring.service.MemberService.MemberQueryService;
 import umc.spring.service.ReviewService.ReviewQueryService;
+import umc.spring.validation.annotation.ChallengingMission;
 import umc.spring.validation.annotation.CheckPage;
 import umc.spring.validation.annotation.ExistMember;
 import umc.spring.validation.annotation.ExistStore;
@@ -26,6 +35,8 @@ import umc.spring.web.dto.MemberResponseDTO;
 import umc.spring.web.dto.ReviewResponseDTO;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,6 +46,8 @@ public class MemberRestController {
 
     private final MemberCommandService memberCommandService;
     private final MemberQueryService memberQueryService;
+    private final MemberRepository memberRepository;
+    private final MissionRepository missionRepository;
 
     @PostMapping
     public ApiResponse<MemberResponseDTO.JoinResultDTO> join(@RequestBody @Valid MemberRequestDTO.JoinDto request){
@@ -60,4 +73,23 @@ public class MemberRestController {
         return ApiResponse.onSuccess(ReviewConverter.memberReviewPreViewListDTO(storePage));
     }
 
+    @PostMapping("/mission")
+    @Operation(summary = "특정 가게의 미션을 도전중인 미션에 추가 API", description = "특정 가게의 미션을 도전중인 미션에 추가하는 API 입니다.")
+    public ApiResponse<MemberResponseDTO.addMemberMissionResultDTO> addMemberMission(@RequestBody @Valid @ChallengingMission MemberRequestDTO.addMemberMission request){
+
+        // request로 받은 사용자가 존재하지 않으면
+        Optional<Member> memberId = memberRepository.findById(request.getMemberId());
+        if(memberId.isPresent() == false){
+            throw new GeneralException(ErrorStatus.MEMBER_NOT_FOUND);
+        }
+
+        // request로 받은 미션이 존재하지 않으면
+        Optional<Mission> missionId = missionRepository.findById(request.getMissionId());
+        if(missionId.isPresent() == false){
+            throw new GeneralException(ErrorStatus.MISSION_NOT_FOUND);
+        }
+
+        MemberMission memberMission = memberCommandService.memberAddMission(request);
+        return ApiResponse.onSuccess(MemberMissionConverter.toMemberMissionDTO(memberMission));
+    }
 }

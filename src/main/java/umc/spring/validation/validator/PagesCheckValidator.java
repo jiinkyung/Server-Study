@@ -1,6 +1,7 @@
 package umc.spring.validation.validator;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.validator.constraintvalidation.HibernateConstraintValidatorContext;
 import org.springframework.stereotype.Component;
 import umc.spring.apiPayload.code.status.ErrorStatus;
 import umc.spring.repository.MemberRepository;
@@ -22,16 +23,15 @@ public class PagesCheckValidator implements ConstraintValidator<CheckPage, Integ
 
     @Override
     public boolean isValid(Integer value, ConstraintValidatorContext context) {
-        Boolean isValid = true;
 
         if (value < 1) {
-            isValid = false;
-        }
-        if(!isValid){
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(ErrorStatus.PAGES_NOT_FOUND.toString()).addConstraintViolation();
+            return false;
         }
 
-        return isValid;
+        int pageNum = value - 1;
+
+        return pageNum >= 0;
     }
 }

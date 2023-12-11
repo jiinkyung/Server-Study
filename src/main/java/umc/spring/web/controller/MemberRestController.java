@@ -72,24 +72,4 @@ public class MemberRestController {
         Page<Review> storePage = memberQueryService.getReviewList(memberId, page);
         return ApiResponse.onSuccess(ReviewConverter.memberReviewPreViewListDTO(storePage));
     }
-
-    @PostMapping("/mission")
-    @Operation(summary = "특정 가게의 미션을 도전중인 미션에 추가 API", description = "특정 가게의 미션을 도전중인 미션에 추가하는 API 입니다.")
-    public ApiResponse<MemberResponseDTO.addMemberMissionResultDTO> addMemberMission(@RequestBody @Valid @ChallengingMission MemberRequestDTO.addMemberMission request){
-
-        // request로 받은 사용자가 존재하지 않으면
-        Optional<Member> memberId = memberRepository.findById(request.getMemberId());
-        if(memberId.isPresent() == false){
-            throw new GeneralException(ErrorStatus.MEMBER_NOT_FOUND);
-        }
-
-        // request로 받은 미션이 존재하지 않으면
-        Optional<Mission> missionId = missionRepository.findById(request.getMissionId());
-        if(missionId.isPresent() == false){
-            throw new GeneralException(ErrorStatus.MISSION_NOT_FOUND);
-        }
-
-        MemberMission memberMission = memberCommandService.memberAddMission(request);
-        return ApiResponse.onSuccess(MemberMissionConverter.toMemberMissionDTO(memberMission));
-    }
 }

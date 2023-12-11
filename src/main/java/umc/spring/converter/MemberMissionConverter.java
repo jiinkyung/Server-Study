@@ -39,4 +39,11 @@ public class MemberMissionConverter {
                 .createAt(LocalDateTime.now())
                 .build();
     }
+
+    public static MemberMission toEntity2(Long memberId, Long missionId) {
+        return MemberMission.builder()
+                .member(Member.builder().id(memberId).build())
+                .mission(Mission.builder().id(missionId).build())
+                .build();
+    }
 }

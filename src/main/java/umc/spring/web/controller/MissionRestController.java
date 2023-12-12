@@ -36,8 +36,8 @@ public class MissionRestController {
 
     @PostMapping("/addMission")
     @Operation(summary = "특정 가게의 미션을 도전중인 미션에 추가 API (requestParam 이용)", description = "특정 가게의 미션을 도전중인 미션에 추가하는 API 입니다.")
-    public ApiResponse<MemberResponseDTO.addMemberMissionResultDTO> addMemberMissionWithParam(@RequestParam Long memberId,
-                                                                                              @RequestParam Long missionId) {
+    public ApiResponse<MemberResponseDTO.addMemberMissionResultDTO> addMemberMission(@RequestParam Long memberId,
+                                                                                     @RequestParam Long missionId) {
 
         // request로 받은 사용자가 존재하지 않으면
         Optional<Member> member = memberRepository.findById(memberId);

@@ -27,12 +27,6 @@ public class MemberMissionConverter {
 //                .build();
 //    }
 
-    public static MemberMission toEntity(MemberRequestDTO.addMemberMission request){
-        return MemberMission.builder()
-                .member(Member.builder().id(request.getMemberId()).build())
-                .mission(Mission.builder().id(request.getMissionId()).build())
-                .build();
-    }
     public static MemberResponseDTO.addMemberMissionResultDTO toMemberMissionDTO (MemberMission memberMission){
         return MemberResponseDTO.addMemberMissionResultDTO.builder()
                 .memberMissionId(memberMission.getId())
@@ -40,7 +34,7 @@ public class MemberMissionConverter {
                 .build();
     }
 
-    public static MemberMission toEntity2(Long memberId, Long missionId) {
+    public static MemberMission toEntity(Long memberId, Long missionId) {
         return MemberMission.builder()
                 .member(Member.builder().id(memberId).build())
                 .mission(Mission.builder().id(missionId).build())

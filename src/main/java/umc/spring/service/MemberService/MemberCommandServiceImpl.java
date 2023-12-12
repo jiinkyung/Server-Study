@@ -54,24 +54,10 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
 
     }
-
-    @Override
-    @Transactional
-    public MemberMission memberAddMission(MemberRequestDTO.addMemberMission request){
-        MemberMission memberMission = MemberMissionConverter.toEntity(request);
-
-        memberMission.setMember(memberRepository.findById(request.getMemberId()).get());
-        memberMission.setMission(missionRepository.findById(request.getMissionId()).get());
-
-        memberMission.setStatus(MissionStatus.CHALLENGING);
-
-        return memberMissionRepository.save(memberMission);
-    }
-
     @Override
     @Transactional
     public MemberMission memberAddMission(Long memberId, Long missionId) {
-        MemberMission memberMission = MemberMissionConverter.toEntity2(memberId, missionId);
+        MemberMission memberMission = MemberMissionConverter.toEntity(memberId, missionId);
 
         memberMission.setMember(memberRepository.findById(memberId).get());
         memberMission.setMission(missionRepository.findById(missionId).get());

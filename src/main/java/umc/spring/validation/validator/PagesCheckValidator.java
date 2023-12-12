@@ -26,7 +26,7 @@ public class PagesCheckValidator implements ConstraintValidator<CheckPage, Integ
 
         if (value < 1) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate(ErrorStatus.PAGES_NOT_FOUND.toString()).addConstraintViolation();
+            context.buildConstraintViolationWithTemplate(ErrorStatus.INVALID_PAGES.toString()).addConstraintViolation();
             return false;
         }
 

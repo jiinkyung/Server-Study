@@ -20,6 +20,7 @@ import umc.spring.converter.ReviewConverter;
 import umc.spring.domain.Member;
 import umc.spring.domain.Mission;
 import umc.spring.domain.Review;
+import umc.spring.domain.enums.MissionStatus;
 import umc.spring.domain.mapping.MemberMission;
 import umc.spring.repository.MemberRepository;
 import umc.spring.repository.MissionRepository;
@@ -46,8 +47,6 @@ public class MemberRestController {
 
     private final MemberCommandService memberCommandService;
     private final MemberQueryService memberQueryService;
-    private final MemberRepository memberRepository;
-    private final MissionRepository missionRepository;
 
     @PostMapping
     public ApiResponse<MemberResponseDTO.JoinResultDTO> join(@RequestBody @Valid MemberRequestDTO.JoinDto request){
@@ -72,4 +71,13 @@ public class MemberRestController {
         Page<Review> storePage = memberQueryService.getReviewList(memberId, page);
         return ApiResponse.onSuccess(ReviewConverter.memberReviewPreViewListDTO(storePage));
     }
+
+    @GetMapping("/{memberId}/missions")
+    @Operation(summary = "특정 유저가 도전 중인 미션 목록 조회 API",description = "특정 유저가 도전 중인 미션들의 목록을 조회하는 API이며, 페이징을 포함합니다. query String 으로 page 번호를 주세요")
+    public ApiResponse<MemberResponseDTO.getMemberChallengingMissionListDTO> getMemberChallengingMissionList(@PathVariable(name = "memberId") Long memberId,
+                                                                                                             @CheckPage @RequestParam(name = "page") Integer page){
+        Page<MemberMission> memberChallengingMissionPage = memberQueryService.getMemberChallengingMissionList(memberId, page - 1);
+        return ApiResponse.onSuccess(MemberMissionConverter.toMemberChallengingMissionListDTO(memberChallengingMissionPage));
+    }
+
 }

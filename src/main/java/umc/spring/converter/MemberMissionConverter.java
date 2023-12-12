@@ -1,12 +1,14 @@
 package umc.spring.converter;
 
+import org.springframework.data.domain.Page;
 import umc.spring.domain.Member;
 import umc.spring.domain.Mission;
 import umc.spring.domain.mapping.MemberMission;
-import umc.spring.web.dto.MemberRequestDTO;
 import umc.spring.web.dto.MemberResponseDTO;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MemberMissionConverter {
 
@@ -40,4 +42,30 @@ public class MemberMissionConverter {
                 .mission(Mission.builder().id(missionId).build())
                 .build();
     }
+
+    public static MemberResponseDTO.getMemberChallengingMissionDTO toMemberChallengingMissionDTO(MemberMission memberMission){
+        return MemberResponseDTO.getMemberChallengingMissionDTO.builder()
+                .memberMissionId(memberMission.getId())
+                .createdAt(LocalDateTime.now())
+                .storeName(memberMission.getMission().getStore().getName())
+                .missionId(memberMission.getMission().getId())
+                .missionSpec(memberMission.getMission().getMissionSpec())
+                .point(memberMission.getMission().getPoint())
+                .build();
+    }
+
+    public static MemberResponseDTO.getMemberChallengingMissionListDTO toMemberChallengingMissionListDTO(Page<MemberMission> memberChallengingList){
+        List<MemberResponseDTO.getMemberChallengingMissionDTO> memberChallengingMissionList = memberChallengingList.stream()
+                .map(MemberMissionConverter::toMemberChallengingMissionDTO).collect(Collectors.toList());
+
+        return MemberResponseDTO.getMemberChallengingMissionListDTO.builder()
+                .isLast(memberChallengingList.isLast())
+                .isFirst(memberChallengingList.isFirst())
+                .totalPage(memberChallengingList.getTotalPages())
+                .totalElements(memberChallengingList.getTotalElements())
+                .listSize(memberChallengingMissionList.size())
+                .memberChallengingMissionList(memberChallengingMissionList)
+                .build();
+    }
+
 }

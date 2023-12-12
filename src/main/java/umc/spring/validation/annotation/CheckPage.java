@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CheckPage {
 
-    String message() default "해당하는 페이지가 존재하지 않습니다.";
+    String message() default "페이지는 1 이상의 값을 입력해주세요.";
 
     Class<?>[] groups() default {};
 

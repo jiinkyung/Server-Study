@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class MemberResponseDTO {
 
@@ -27,4 +28,32 @@ public class MemberResponseDTO {
         Long memberMissionId;
         LocalDateTime createAt;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class getMemberChallengingMissionDTO {
+        Long memberMissionId;
+        LocalDateTime createdAt;
+        String storeName;
+        Long missionId;
+        String missionSpec;
+        Integer point;
+
+
+    }
+    @Builder
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class getMemberChallengingMissionListDTO{
+        List<MemberResponseDTO.getMemberChallengingMissionDTO> memberChallengingMissionList;
+        Integer listSize;
+        Integer totalPage;
+        Long totalElements;
+        Boolean isFirst;
+        Boolean isLast;
+    }
+
 }
